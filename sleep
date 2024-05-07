@@ -1,0 +1,102 @@
+create database JavaProject;
+Use JavaProject;
+DROP TABLE BANK;
+
+-- BankTable
+create table Bank(
+Bank_Name VARCHAR(25) NOT NULL,
+Acc_No VARCHAR(16) PRIMARY KEY,
+Closing_Bal DOUBLE);
+
+INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
+('hdfc','2344234423442344',100000);
+INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
+('hdfc','4423442344234423',120000);
+INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
+('sbi','1234123412341234',150000);
+-- CustomerTable
+
+CREATE TABLE CUSTOMER
+(
+CID  INT PRIMARY KEY AUTO_INCREMENT,
+Aadhar_No VARCHAR(12),
+Acc_No VARCHAR(16),FOREIGN KEY(Acc_No) REFERENCES Bank(Acc_No),
+Email VARCHAR(320) UNIQUE,
+Cust_Name VARCHAR(20),
+Ph_no VARCHAR(10) UNIQUE,
+Cust_Password VARCHAR(8)
+);
+
+ALTER TABLE CUSTOMER AUTO_INCREMENT=111;
+INSERT INTO CUSTOMER(Aadhar_No,Acc_No,Email,Cust_Name,Ph_no,Cust_Password)values
+('123467891123','2344234423442344','Abcd123@gamil.com','Sai','9876543210','mnaopqr');
+
+INSERT INTO CUSTOMER(Aadhar_No,Acc_No,Email,Cust_Name,Ph_no,Cust_Password)values
+('234678911231','4423442344234423','Hello123@gamil.com','Dhoni','7654321098','abcdef');
+
+INSERT INTO CUSTOMER(Aadhar_No,Acc_No,Email,Cust_Name,Ph_no,Cust_Password)values
+('467891123123','1234123412341234','Newbee123@gamil.com','Virat','5432109876','nncdef');
+-- ALTER TABLE CUSTOMER AUTO_INCREMENT=111;
+UPDATE `javaproject`.`CUSTOMER` SET `CID` = '111' WHERE (`CID` = '2');
+
+SELECT* from CUSTOMER;
+ 
+-- TagTable
+drop table TAG;
+CREATE TABLE TAG
+(
+Tag_Id INT PRIMARY KEY AUTO_INCREMENT,
+Wallet_Bal DOUBLE,
+Security_Deposit INT DEFAULT 100
+); 
+ALTER TABLE TAG AUTO_INCREMENT=500;
+
+ALTER TABLE TAG
+ADD CID int;
+alter table tag
+ADD CONSTRAINT customer_id
+FOREIGN KEY (CID) REFERENCES CUSTOMER(CID);
+insert into TAG(Wallet_Bal,Security_Deposit,CID)values 
+(300,default,111),
+(600,default,112),
+(350,default,113);
+select * from TAG;
+delete from TAG where Tag_Id =600;
+
+
+-- VehicleTable
+CREATE TABLE VEHICLE
+(
+	CID INT,FOREIGN KEY(CID) REFERENCES CUSTOMER(CID),
+    Veh_No VARCHAR(10) PRIMARY KEY,
+    Veh_Type VARCHAR(10),
+    Tag_Id INT,FOREIGN KEY(Tag_Id) REFERENCES TAG(Tag_Id)
+);
+-- lmv light motor vehicle
+-- hcm heavy construction machinary
+-- 2axle bus truck
+insert into VEHICLE (CID,Veh_No,Veh_Type,Tag_Id)values 
+(111,'TN37DS8273','lmv','601'),
+(112,'TN37DJ7777','hcm','602'),
+(113,'TN37CD5369','2axle','603');
+
+
+-- Contractor Table
+
+create table Contractor(
+Con_id int primary key auto_increment,
+cname varchar(25) not null,
+ph_no varchar(10) not null unique,
+email varchar(320) unique,
+Acc_No VARCHAR(16),FOREIGN KEY(Acc_No) REFERENCES Bank(Acc_No),
+Aadhar varchar(12) unique,
+pass varchar(8) not null,
+
+);
+
+
+-- toll table
+create table Toll(
+tollno int 
+)
+
