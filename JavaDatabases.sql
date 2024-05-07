@@ -1,0 +1,66 @@
+create database JavaProject;
+Use JavaProject;
+DROP TABLE BANK;
+
+-- BankTable
+create table Bank(
+Bank_Name VARCHAR(25) NOT NULL,
+Acc_No VARCHAR(16) PRIMARY KEY,
+Closing_Bal DOUBLE);
+
+INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
+('hdfc','2344234423442344',100000);
+INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
+('hdfc','4423442344234423',120000);
+INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
+('sbi','1234123412341234',150000);
+-- CustomerTable
+
+CREATE TABLE CUSTOMER
+(
+CID  INT PRIMARY KEY AUTO_INCREMENT,
+Aadhar_No VARCHAR(12),
+Acc_No VARCHAR(16),FOREIGN KEY(Acc_No) REFERENCES Bank(Acc_No),
+Email VARCHAR(320) UNIQUE,
+Cust_Name VARCHAR(20),
+Ph_no VARCHAR(10) UNIQUE,
+Cust_Password VARCHAR(8)
+);
+
+ALTER TABLE CUSTOMER AUTO_INCREMENT=111;
+INSERT INTO CUSTOMER(Aadhar_No,Acc_No,Email,Cust_Name,Ph_no,Cust_Password)values
+('123467891123','2344234423442344','Abcd123@gamil.com','Sai','9876543210','mnaopqr');
+
+INSERT INTO CUSTOMER(Aadhar_No,Acc_No,Email,Cust_Name,Ph_no,Cust_Password)values
+('234678911231','4423442344234423','Hello123@gamil.com','Dhoni','7654321098','abcdef');
+
+INSERT INTO CUSTOMER(Aadhar_No,Acc_No,Email,Cust_Name,Ph_no,Cust_Password)values
+('467891123123','1234123412341234','Newbee123@gamil.com','Virat','5432109876','nncdef');
+-- ALTER TABLE CUSTOMER AUTO_INCREMENT=111;
+UPDATE `javaproject`.`CUSTOMER` SET `CID` = '111' WHERE (`CID` = '2');
+
+SELECT* from CUSTOMER;
+ 
+-- TagTable
+CREATE TABLE TAG
+(
+Tag_Id INT PRIMARY KEY AUTO_INCREMENT,
+Wallet_Bal DOUBLE,
+Security_Deposit INT DEFAULT 100
+); 
+
+
+-- VehicleTable
+
+CREATE TABLE VEHICLE
+(
+	CID INT,FOREIGN KEY(CID) REFERENCES CUSTOMER(CID),
+    Veh_No VARCHAR(10) PRIMARY KEY,
+    Veh_Type VARCHAR(10),
+    Tag_Id INT,FOREIGN KEY(Tag_Id) REFERENCES TAG(Tag_Id)
+);
+
+
+
+
+
