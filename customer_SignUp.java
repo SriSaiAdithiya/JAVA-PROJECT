@@ -1,5 +1,5 @@
 
-package Login;
+package login;
 
 import java.awt.EventQueue;
 
@@ -7,18 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.awt.event.ActionEvent;
 
 public class customer_SignUp extends JFrame {
 
@@ -124,7 +116,7 @@ public class customer_SignUp extends JFrame {
 		
 		
 		JButton btnNewButton = new JButton("Register");
-		btnNewButton.setBackground(new Color(255, 128, 0));
+		/*btnNewButton.setBackground(new Color(255, 128, 0));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String url="jdbc:mysql://localhost:3306/JavaProject";
@@ -152,7 +144,7 @@ public class customer_SignUp extends JFrame {
 					System.out.println("Error: " + e1.getMessage());
 				}
 			}
-		});
+		});*/
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 17));
 		btnNewButton.setBounds(154, 500, 130, 40);
 		contentPane.add(btnNewButton);
