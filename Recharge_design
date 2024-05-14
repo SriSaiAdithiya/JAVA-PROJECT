@@ -65,7 +65,7 @@ public class Recharge_design extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_3 = new JLabel("SDP");
+		JLabel lblNewLabel_3 = new JLabel("DPPS");
 		lblNewLabel_3.setFont(new Font("Gadugi", Font.BOLD, 17));
 		lblNewLabel_3.setBounds(10, 5, 104, 35);
 		panel.add(lblNewLabel_3);
