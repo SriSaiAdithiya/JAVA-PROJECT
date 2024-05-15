@@ -172,7 +172,7 @@ public class Customer extends JFrame {
                     con.close();
                     setVisible(false);
                     new Bank_Signup(email).setVisible(true);
-                } catch (SQLException e1) 
+                } catch (SQLException e1)
                 {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
