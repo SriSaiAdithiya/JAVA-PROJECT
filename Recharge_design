@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.Window;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -34,6 +36,7 @@ public class Recharge_design extends JFrame {
 	private JPasswordField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
+	protected Window frame;
 	private static int cid;
 
 	/**
@@ -146,13 +149,13 @@ public class Recharge_design extends JFrame {
 		             pst1.setString(1,textField_5.getText());
 		             pst1.setInt(2, cid);
 		            
-		             
 		             int rowsUpdated1 = pst1.executeUpdate();
-		             
-		             
-		             
-		             
-                     
+		             JOptionPane.showMessageDialog(btnNewButton, " Payment Completed successfully");
+		             btnNewButton.setEnabled(false);
+	                 pst.close();
+                     pst1.close();
+	                 con.close();
+		            
 		         }catch(SQLException E){
 		        	 E.printStackTrace();
 		             System.out.println(E.getMessage());
