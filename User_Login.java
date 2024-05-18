@@ -1,4 +1,4 @@
-package org.example;
+package login;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.swing.*;
@@ -146,7 +146,7 @@ public class User_Login
 
                 if(x==0)
                 {
-                    try(Connection con = DbConnection.getConnection()){
+                    try(Connection con = DBCONNECTIO.getConnection()){
                         String Query = "Select CID from Customer where Cust_Name = ? and Cust_Password = ? ;";
                         PreparedStatement pst = con.prepareStatement(Query);
                         pst.setString(1,username.getText());
@@ -155,7 +155,11 @@ public class User_Login
                         if(rs.next())
                         {
                             MainFrame.setVisible(false);
-                            new customer_page().setVisible(true);
+                           
+                            
+                            int cid = rs.getInt(1);
+                            new customer_page(cid).setVisible(true);
+                            
                         }
                         else {
                             JOptionPane.showMessageDialog(null,"Error");
@@ -188,6 +192,15 @@ public class User_Login
 
             }
         });
+        
+      /*  signup.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		new signIn().setVisible(true);
+        	}
+        	
+        });*/
+        
+        
 
         MainFrame.setVisible(true);
     }
@@ -196,6 +209,3 @@ public class User_Login
     }
 
 }
-
-
-
