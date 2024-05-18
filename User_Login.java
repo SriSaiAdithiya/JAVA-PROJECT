@@ -37,14 +37,14 @@ public class User_Login
         MainFrame.setContentPane(imglabel);
 
 
-        MainFrame.setLayout(null);
+        MainFrame.getContentPane().setLayout(null);
         MainFrame.setSize(1300,650);
 
 
 
         mypanel = new JPanel();
         mypanel.setLayout(null);
-        MainFrame.add(mypanel);
+        MainFrame.getContentPane().add(mypanel);
         mypanel.setBounds(400,180,500,300);
         mypanel.setBackground(new Color(166,165,153,25));
 
@@ -84,7 +84,7 @@ public class User_Login
         });
 
         showpass = new JCheckBox("Show password");
-        showpass.setBounds(320,150,110,20);
+        showpass.setBounds(320,150,122,20);
         showpass.setFont(new Font("HP Simplified",Font.BOLD,12));
 
         showpass.addActionListener(new ActionListener() {
@@ -126,7 +126,7 @@ public class User_Login
         mypanel.add(signup);
         mypanel.add(signbut);
         MainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        MainFrame.setLayout(null);
+        MainFrame.getContentPane().setLayout(null);
 
         login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
