@@ -6,6 +6,8 @@ Bank_Name VARCHAR(25) NOT NULL,
 Acc_No VARCHAR(16) PRIMARY KEY,
 Closing_Bal DOUBLE
 );
+ALTER TABLE BANK 
+modify COLUMN ACC_No VARCHAR(16) NOT NULL;
 
 INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
 ('hdfc','5578120934342178',80430);
@@ -28,7 +30,18 @@ Cust_Name VARCHAR(20),
 Ph_no VARCHAR(10) UNIQUE,
 Cust_Password VARCHAR(20)
 );
-
+ALTER TABLE CUSTOMER 
+modify COLUMN Aadhar_No VARCHAR(12) NOT NULL;
+ALTER TABLE CUSTOMER 
+modify COLUMN Acc_No VARCHAR(16) NOT NULL;
+ALTER TABLE CUSTOMER 
+modify COLUMN Email VARCHAR(320) NOT NULL;
+ALTER TABLE CUSTOMER 
+modify COLUMN Cust_Name VARCHAR(20) NOT NULL;
+ALTER TABLE CUSTOMER 
+modify COLUMN Ph_No VARCHAR(10) NOT NULL;
+ALTER TABLE CUSTOMER 
+modify COLUMN Aadhar_No VARCHAR(12) NOT NULL;
 
 INSERT INTO CUSTOMER (Acc_No,Aadhar_No,Email,Cust_Name,Ph_no,Cust_Password) VALUES
 ('5578120934342178','214365879876','Mahaa123@gamil.com','MahaaSri','6369406440','MahaaSri2004'),
@@ -98,11 +111,11 @@ create table toll
     -- Fair_Amt INT
 
 );
-
+drop table toll;
 INSERT INTO TOLL(Toll_No) VALUES 
-(121),(122),(123),(124),(125),(221),(222),(223),(321),(322),(323),(324),(325),(421),(422),(521),(522),(523),(524);
+(121),(122),(123),(124),(125),(221),(222),(223),(321),(322),(323),(324),(325),(421),(422),(521),(522),(523),(524),(621),(622);
 
-SELECT * from toll;
+SELECT * from tag;
 CREATE INDEX idx_Veh_Type ON VEHICLE(Veh_Type);
 
 -- toll look up table
@@ -127,6 +140,40 @@ INSERT INTO ROUTE (RID,Src,Dest) VALUES
 (004,'Chennai','Coimbatore'),
 (005,'Pondicherry','Coimbatore'),
 (006,'Pondicherry','Chennai');
-SELECT * FROM ROUTE;
- -- create table TOLL_CONTRACTOR 
+SELECT * FROM Contractor;
+create table TOLL_CONTRACTOR 
+(
+	RID int, FOREIGN KEY(RID) REFERENCES Route(RID),
+	Toll_No INT,FOREIGN KEY(Toll_No) REFERENCES TOLL(Toll_No),
+    Con_id INT,FOREIGN KEY(Con_id) REFERENCES Contractor(Con_id)
+);
+CREATE INDEX toll_contractor_ibfk_1 ON ROUTE(RID);
+INSERT INTO TOLL_CONTRACTOR (RID,Toll_No,Con_id) VALUES
+(1,121,1),
+(1,122,1),
+(1,123,5),
+(1,124,5),
+(1,125,1),
+
+(2,221,2),
+(2,222,3),
+(2,223,3),
+
+(3,321,1),
+(3,322,5),
+(3,323,4),
+(3,324,4),
+(3,325,4),
+
+(4,421,3),
+(4,422,2),
+
+(5,521,5),
+(5,521,3),
+(5,521,2),
+(5,521,5),
+
+(6,621,2),
+(6,622,2);
+select * from TOLL_CONTRACTOR;
 
