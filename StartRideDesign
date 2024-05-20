@@ -1,0 +1,180 @@
+package org.example;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+public class StartRide {
+    JFrame Rideframe;
+    JPanel dummy1;
+    JPanel dummy2;
+    JPanel mainpanel;
+    JButton lane1,lane2,lane3,lane4,status;
+    JComboBox<String> sourceBox;
+    JComboBox<String> destiBox;
+
+    int x;
+
+
+    StartRide(){
+        Rideframe = new JFrame("Ride Page");
+        Rideframe.setLayout(null);
+        Rideframe.setSize(1300,650);
+
+        mainpanel = new JPanel();
+        mainpanel.setLayout(null);
+        Rideframe.add(mainpanel);
+        mainpanel.setBounds(50,20,1180,565);
+        mainpanel.setBackground(new Color(110, 194, 246));
+
+        lane1 = new JButton("LANE 1");
+        lane2 = new JButton("LANE 2");
+        lane3 = new JButton("LANE 3");
+        lane4 = new JButton("LANE 4");
+
+        lane1 = new JButton("LANE 1");
+        lane1.setBounds(250,85,80,30);
+        lane1.setFont(new Font("HP Simplified",Font.BOLD,12));
+        lane1.setBackground(new Color(250,250,250));
+
+        lane2 = new JButton("LANE 2");
+        lane2.setBounds(400,85,80,30);
+        lane2.setFont(new Font("HP Simplified",Font.BOLD,12));
+        lane2.setBackground(new Color(250,250,250));
+
+        lane3 = new JButton("LANE 3");
+        lane3.setBounds(550,85,80,30);
+        lane3.setFont(new Font("HP Simplified",Font.BOLD,12));
+        lane3.setBackground(new Color(250,250,250));
+
+        lane4 = new JButton("LANE 4");
+        lane4.setBounds(700,85,80,30);
+        lane4.setFont(new Font("HP Simplified",Font.BOLD,12));
+        lane4.setBackground(new Color(250,250,250));
+
+
+        status = new JButton("ARRIVED");
+        status.setBounds(850,85,80,30);
+        status.setFont(new Font("HP Simplified",Font.BOLD,12));
+        status.setBackground(new Color(250,250,250));
+
+        status.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(x==1)
+                {
+                    JOptionPane.showMessageDialog(null,"Toll Crossed");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"Toll not arrived yet");
+                }
+            }
+
+        });
+
+
+
+        lane1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                x=1;
+                lane1.setBackground(Color.lightGray);
+                status.setBackground(Color.green);
+            }
+        });
+
+        lane2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                x=1;
+                lane2.setBackground(Color.lightGray);
+                status.setBackground(Color.green);
+            }
+        });
+
+        lane3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                x=1;
+                lane3.setBackground(Color.lightGray);
+                status.setBackground(Color.green);
+            }
+        });
+
+        lane4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                x=1;
+                lane4.setBackground(Color.lightGray);
+                status.setBackground(Color.green);
+            }
+        });
+
+        mainpanel.add(lane1);
+        mainpanel.add(lane2);
+        mainpanel.add(lane3);
+        mainpanel.add(lane4);
+        mainpanel.add(status);
+
+        sourceBox = new JComboBox<>();
+        sourceBox.setBounds(350, 15, 200, 30);
+        mainpanel.add(sourceBox);
+
+        destiBox = new JComboBox<>();
+        destiBox.setBounds(580, 15, 200, 30);
+        mainpanel.add(destiBox);
+
+
+        try {
+            List<String> items1 = fetchItemsFromDatabase("Route","Src");
+            for (String item : items1) {
+                sourceBox.addItem(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            List<String> items2 = fetchItemsFromDatabase("Route","Dest");
+            for (String item : items2) {
+                destiBox.addItem(item);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Rideframe.setVisible(true);
+        Rideframe.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    private List<String> fetchItemsFromDatabase(String TableName,String ColName) throws SQLException {
+        List<String> items = new ArrayList<>();
+        String query1 = "SELECT distinct " + ColName + " FROM " + TableName + ";";
+
+        try (Connection conn = DbConnection.getConnection();
+             Statement stmt1 = conn.createStatement();
+             ResultSet rs1 = stmt1.executeQuery(query1)) {
+            while (rs1.next()) {
+                items.add(rs1.getString(ColName));
+            }
+
+        }
+        return items;
+
+    }
+
+
+    public static void main(String[] args) {
+        new StartRide();
+    }
+
+}
+
+
+
