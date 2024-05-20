@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
@@ -133,27 +134,40 @@ public class Recharge_design extends JFrame {
 					 //System.out.println(2);
 		             String Query = "UPDATE tag SET tag.wallet_bal = tag.wallet_bal + ? "
 		             		+ "WHERE (select vehicle.tag_id from vehicle where cid = ? and veh_no = ? ) = tag.tag_id;";
+		             //query to add recharge amount to the wallet balance
 		             
 		             PreparedStatement pst = con.prepareStatement(Query);
-		             pst.setString(1,textField_5.getText());
+		             pst.setString(1,textField_5.getText()); //amount
 		             pst.setInt(2, cid);
-		             pst.setString(3, textField_1.getText()); 
+		             pst.setString(3, textField_1.getText()); //vehicle no
 		             //pst.setString(2,pass1);
 		             int rowsUpdated = pst.executeUpdate();
 		             
-		             
+		             // query to deduct amount from the bank amount
 		             String Query1 = "update bank set closing_bal = closing_bal - ? where "
 		             		           + "acc_no = (select customer.acc_no from customer where customer.cid = ?); ";
 		             
 		             PreparedStatement pst1 = con.prepareStatement(Query1);
-		             pst1.setString(1,textField_5.getText());
+		             pst1.setString(1,textField_5.getText());//amount
 		             pst1.setInt(2, cid);
 		            
 		             int rowsUpdated1 = pst1.executeUpdate();
+		             
+		             //query to update the recharge history table
+		             String Query2 = "insert into recharge(cid,cust_name,veh_no,amount) values(?,?,?,?);";
+		             PreparedStatement pst2 = con.prepareStatement(Query2);
+		             pst2.setInt(1, cid);
+		             pst2.setString(2, textField.getText());//customer name
+		             pst2.setString(3, textField_1.getText()); //vehicle no
+		             pst2.setString(4, textField_5.getText());  //recharge amount
+		             
+		             pst2.execute();
+		             
 		             JOptionPane.showMessageDialog(btnNewButton, " Payment Completed successfully");
 		             btnNewButton.setEnabled(false);
 	                 pst.close();
                      pst1.close();
+                     pst2.close();
 	                 con.close();
 		            
 		         }catch(SQLException E){
