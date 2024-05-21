@@ -195,6 +195,7 @@ public class StartRide {
             public void actionPerformed(ActionEvent e) {
                 x=1;
                 lane1.setBackground(Color.lightGray);
+                mainpanel.add(status);
                 status.setBackground(Color.green);
             }
         });
@@ -204,6 +205,7 @@ public class StartRide {
             public void actionPerformed(ActionEvent e) {
                 x=1;
                 lane2.setBackground(Color.lightGray);
+                mainpanel.add(status);
                 status.setBackground(Color.green);
             }
         });
@@ -213,6 +215,7 @@ public class StartRide {
             public void actionPerformed(ActionEvent e) {
                 x=1;
                 lane3.setBackground(Color.lightGray);
+                mainpanel.add(status);
                 status.setBackground(Color.green);
             }
         });
@@ -222,6 +225,7 @@ public class StartRide {
             public void actionPerformed(ActionEvent e) {
                 x=1;
                 lane4.setBackground(Color.lightGray);
+                mainpanel.add(status);
                 status.setBackground(Color.green);
             }
         });
@@ -236,6 +240,7 @@ public class StartRide {
                 else {
                     y=1;
                     kane1.setBackground(Color.lightGray);
+                    mainpanel.add(status1);
                     status1.setBackground(Color.green);
                 }
 
@@ -252,6 +257,7 @@ public class StartRide {
                 else {
                     y=1;
                     kane2.setBackground(Color.lightGray);
+                    mainpanel.add(status1);
                     status1.setBackground(Color.green);
                 }
 
@@ -268,6 +274,7 @@ public class StartRide {
                 else {
                     y=1;
                     kane3.setBackground(Color.lightGray);
+                    mainpanel.add(status1);
                     status1.setBackground(Color.green);
                 }
 
@@ -284,6 +291,7 @@ public class StartRide {
                 else {
                     y=1;
                     kane4.setBackground(Color.lightGray);
+                    mainpanel.add(status1);
                     status1.setBackground(Color.green);
                 }
 
@@ -300,6 +308,7 @@ public class StartRide {
                 else {
                     z=1;
                     jane1.setBackground(Color.lightGray);
+                    mainpanel.add(status2);
                     status2.setBackground(Color.green);
                 }
 
@@ -316,6 +325,7 @@ public class StartRide {
                 else {
                     z=1;
                     jane2.setBackground(Color.lightGray);
+                    mainpanel.add(status2);
                     status2.setBackground(Color.green);
                 }
 
@@ -332,6 +342,7 @@ public class StartRide {
                 else {
                     z=1;
                     jane3.setBackground(Color.lightGray);
+                    mainpanel.add(status2);
                     status2.setBackground(Color.green);
                 }
 
@@ -348,6 +359,7 @@ public class StartRide {
                 else {
                     z=1;
                     jane4.setBackground(Color.lightGray);
+                    mainpanel.add(status2);
                     status2.setBackground(Color.green);
                 }
 
@@ -366,9 +378,9 @@ public class StartRide {
         mainpanel.add(jane2);
         mainpanel.add(jane3);
         mainpanel.add(jane4);
-        mainpanel.add(status);
-        mainpanel.add(status1);
-        mainpanel.add(status2);
+        //mainpanel.add(status);
+        //mainpanel.add(status1);
+        //mainpanel.add(status2);
         mainpanel.add(toll1);
         mainpanel.add(toll2);
         mainpanel.add(toll3);
