@@ -186,6 +186,10 @@ INSERT INTO TOLL_CONTRACTOR (RID,Toll_No,Con_id) VALUES
 (6,622,122);
 select * from TOLL_CONTRACTOR;
 
+INSERT INTO TOLL_CONTRACTOR (RID,Toll_No,Con_id) VALUES
+(8,821,121),
+(8,822,122),
+(8,823,121);
 create table Recharge
 (
 CID INT ,FOREIGN KEY (CID) REFERENCES CUSTOMER(CID),
@@ -196,5 +200,12 @@ Amount int
 );
 ALTER TABLE Recharge
 MODIFY Rtimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-
+select * from Route;
+INSERT INTO ROUTE (RID,Src,Dest) VALUES 
+(007,'Tripur','Madurai'),
+(008,'Coimbatore','Salem');
+select * from Route;
+select * from toll;
+select * from toll_fair;
+select * from Toll_Contractor;
 select * from recharge;
