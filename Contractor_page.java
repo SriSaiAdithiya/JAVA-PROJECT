@@ -65,7 +65,7 @@ public class Contractor_page extends JFrame {
 	 * Create the frame.
 	 */
 	public Contractor_page(int cid) {
-		this.conid = conid;
+		this.conid = 121;
 		
 		try(Connection con = DBCONNECTIO.getConnection()){
             String Query = "Select cname,ph_no,email from contractor where Con_id = ? ;";
@@ -168,10 +168,10 @@ public class Contractor_page extends JFrame {
 		panel_2.setBounds(0, 36, 1370, 40);
 		contentPane.add(panel_2);
 		
-		JLabel lblNewLabel_1 = new JLabel("      Toll Leased");
+		JLabel lblNewLabel_1 = new JLabel("Toll Taken For Lease");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel_1.setBackground(new Color(192, 192, 192));
-		lblNewLabel_1.setBounds(628, 105, 203, 48);
+		lblNewLabel_1.setBounds(628, 105, 218, 48);
 		contentPane.add(lblNewLabel_1);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -187,6 +187,17 @@ public class Contractor_page extends JFrame {
 	        ));
 		 
 		 JButton btnAmountCollected = new JButton("Amount Collected");
+		/* btnAmountCollected.addActionListener(new ActionListener() {
+		 	public void actionPerformed(ActionEvent arg0) {
+		 		 try (Connection con =  DBCONNECTIO.getConnection()) {
+		             String query = " ;";
+		             PreparedStatement pst = con.prepareStatement(query);
+		             pst.setInt(1, conid);
+		             ResultSet rs = pst.executeQuery();
+
+		 	        
+		 	}
+		 });*/
 		 btnAmountCollected.setBounds(1114, 413, 226, 42);
 		 contentPane.add(btnAmountCollected);
 		 btnAmountCollected.setFont(new Font("Tahoma", Font.BOLD, 19));
@@ -214,15 +225,15 @@ public class Contractor_page extends JFrame {
 private void loadToll(int conid) {
     	
         try (Connection con =  DBCONNECTIO.getConnection()) {
-            String query = "select vehicle.veh_type,vehicle.veh_no,tag.wallet_bal "
-            		+ "from tag join vehicle where vehicle.tag_id = tag.tag_id and vehicle.cid = ?;";
+            String query = "select toll_contractor.toll_no,toll_contractor.rid,route.src,route.dest from  toll_contractor join route"
+            		+ " where toll_contractor.rid = route.rid and toll_contractor.con_id = ? ;";
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setInt(1, cid);
+            pst.setInt(1, conid);
             ResultSet rs = pst.executeQuery();
 
             ResultSetMetaData rsmd = rs.getMetaData();
             int cols = rsmd.getColumnCount();
-            String[] colNames = {"Vehicle Type","Vehicle No.","Wallet Balance"};
+            String[] colNames = {"Toll No.","Route No.","Source","Destination"};
            /* for (int i = 0; i < cols; i++) {
                 colNames[i] = rsmd.getColumnName(i + 1);
             }*/
