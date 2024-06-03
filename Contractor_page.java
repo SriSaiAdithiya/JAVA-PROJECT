@@ -1,6 +1,10 @@
-package login;
+package Login;
+
+
 
 import java.awt.EventQueue;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -64,10 +68,10 @@ public class Contractor_page extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Contractor_page(int cid) {
-		this.conid = 121;
+	public Contractor_page(int conid) {
+		this.conid = conid;
 		
-		try(Connection con = DBCONNECTIO.getConnection()){
+		try(Connection con = dbconnection.getConnection()){
             String Query = "Select cname,ph_no,email from contractor where Con_id = ? ;";
             
             PreparedStatement pst = con.prepareStatement(Query);
@@ -203,15 +207,20 @@ public class Contractor_page extends JFrame {
 		 btnAmountCollected.setFont(new Font("Tahoma", Font.BOLD, 19));
 		 btnAmountCollected.setBackground(Color.WHITE);
 		 
+		 
 		 JButton btnAddTag = new JButton("Buy Toll");
-		 btnAddTag.setBounds(1114, 274, 226, 42);
-		 contentPane.add(btnAddTag);
-		 btnAddTag.addActionListener(new ActionListener() {
-		 	public void actionPerformed(ActionEvent arg0) {
-		 	}
-		 });
-		 btnAddTag.setFont(new Font("Tahoma", Font.BOLD, 19));
-		 btnAddTag.setBackground(Color.WHITE);
+	        btnAddTag.setBounds(1114, 274, 226, 42);
+	        contentPane.add(btnAddTag);
+	        btnAddTag.addActionListener(new ActionListener() {
+	            public void actionPerformed(ActionEvent arg0) {
+	                dispose(); // Close the current window
+	                // Open the new window
+	                new BuyToll(conid).setVisible(true);
+	            }
+	        });
+	        btnAddTag.setFont(new Font("Tahoma", Font.BOLD, 19));
+	        btnAddTag.setBackground(Color.WHITE);
+
 		 
 		 JPanel panel_2_1 = new JPanel();
 		 panel_2_1.setLayout(null);
@@ -222,36 +231,51 @@ public class Contractor_page extends JFrame {
 		
 	}
 	
-private void loadToll(int conid) {
-    	
-        try (Connection con =  DBCONNECTIO.getConnection()) {
-            String query = "select toll_contractor.toll_no,toll_contractor.rid,route.src,route.dest from  toll_contractor join route"
-            		+ " where toll_contractor.rid = route.rid and toll_contractor.con_id = ? ;";
-            PreparedStatement pst = con.prepareStatement(query);
-            pst.setInt(1, conid);
-            ResultSet rs = pst.executeQuery();
+	private void loadToll(int conid) {
+	    try (Connection con = dbconnection.getConnection()) {
+	        String query = "SELECT toll_contractor.toll_no, GROUP_CONCAT(DISTINCT toll_contractor.rid), " +
+	                       "GROUP_CONCAT(DISTINCT route.src), GROUP_CONCAT(DISTINCT route.dest) " +
+	                       "FROM toll_contractor " +
+	                       "JOIN route ON toll_contractor.rid = route.rid " +
+	                       "WHERE toll_contractor.con_id = ? " +
+	                       "GROUP BY toll_contractor.toll_no";
+	        PreparedStatement pst = con.prepareStatement(query);
+	        pst.setInt(1, conid);
+	        ResultSet rs = pst.executeQuery();
 
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int cols = rsmd.getColumnCount();
-            String[] colNames = {"Toll No.","Route No.","Source","Destination"};
-           /* for (int i = 0; i < cols; i++) {
-                colNames[i] = rsmd.getColumnName(i + 1);
-            }*/
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
-            model.setColumnIdentifiers(colNames);
+	        ResultSetMetaData rsmd = rs.getMetaData();
+	        int cols = rsmd.getColumnCount();
+	        String[] colNames = {"Toll No.", "Route No.", "Source", "Destination"};
 
-            while (rs.next()) {
-                String[] row = new String[cols];
-                for (int i = 0; i < cols; i++) {
-                    row[i] = rs.getString(i + 1);
-                    System.out.println(row[i]) ;                   //System.out.println(i);
-                }
-                model.addRow(row);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-        }
-    }
+	        DefaultTableModel model = (DefaultTableModel) table.getModel();
+	        model.setColumnIdentifiers(colNames);
+
+	        while (rs.next()) {
+	            String[] row = new String[cols];
+	            for (int i = 0; i < cols; i++) {
+	                if (i == 1) {
+	                    // Splitting the comma-separated values and joining them with commas
+	                    String[] tollNumbers = rs.getString(i + 1).split(",");
+	                    String uniqueTollNumbers = String.join(", ", tollNumbers);
+	                    row[i] = uniqueTollNumbers;
+	                } else if (i == 2 || i == 3) {
+	                    // Replace commas with line breaks
+	                    row[i] = rs.getString(i + 1).replace(",", "\n");
+	                } else {
+	                    // Setting other values directly
+	                    row[i] = rs.getString(i + 1);
+	                }
+	            }
+	            model.addRow(row);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println(e.getMessage());
+	    }
+	}
+
+
+
+
 }
 
