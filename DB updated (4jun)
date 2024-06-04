@@ -1,0 +1,321 @@
+create database Sample2;
+Use Sample2;
+
+DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS Bank;
+
+-- Recreate the Bank table and insert data
+CREATE TABLE Bank (
+    Bank_Name VARCHAR(25) NOT NULL,
+    Acc_No VARCHAR(16) PRIMARY KEY,
+    Closing_Bal DOUBLE
+);
+
+INSERT INTO Bank (Bank_Name, Acc_No, Closing_Bal) VALUES 
+('hdfc', '5578120934342178', 80430),
+('hdfc', '8745616198269010', 120000),
+('sbi', '6800901231673300', 150000),
+('sbi', '4509780913674900', 150000),
+('hdfc', '3328910267674343', 400000);
+
+-- Recreate the Customer table
+CREATE TABLE Customer (
+    CID INT PRIMARY KEY AUTO_INCREMENT,
+    Aadhar_No VARCHAR(12) NOT NULL,
+    Acc_No VARCHAR(16) NOT NULL,
+    Email VARCHAR(320) UNIQUE NOT NULL,
+    Cust_Name VARCHAR(20) NOT NULL,
+    Ph_no VARCHAR(10) UNIQUE NOT NULL,
+    Cust_Password VARCHAR(20) NOT NULL,
+    FOREIGN KEY (Acc_No) REFERENCES Bank(Acc_No)
+);
+
+INSERT INTO Customer (Acc_No, Aadhar_No, Email, Cust_Name, Ph_no, Cust_Password) VALUES
+('5578120934342178', '214365879876', 'Mahaa123@gmail.com', 'MahaaSri', '6369406440', 'MahaaSri2004'),
+('8745616198269010', '987876565434', 'Dhivya@gmail.com', 'DhivyaDharshini', '9342417328', 'Dhivya3113'),
+('6800901231673300', '675645341323', 'Priya05@gmail.com', 'PriyaDharshini', '8148817750', 'PriyaD05'),
+('4509780913674900', '453467561092', 'Kavya567@gmail.com', 'Kavya', '9089786712', 'Kavya005'),
+('3328910267674343', '786756450099', 'Nithish34@gmail.com', 'Nithish', '8987215487', 'Nithish3404');
+
+SELECT * FROM Customer;
+
+
+
+
+CREATE TABLE Contractor (
+    Con_id INT PRIMARY KEY AUTO_INCREMENT,
+	Aadhar VARCHAR(12) UNIQUE,
+    Acc_No VARCHAR(16),
+    FOREIGN KEY (Acc_No) REFERENCES Bank(Acc_No),
+    email VARCHAR(320) UNIQUE,
+    cname VARCHAR(25) NOT NULL,
+    ph_no VARCHAR(10) NOT NULL UNIQUE,
+    Con_Password VARCHAR(20));
+ALTER TABLE Contractor AUTO_INCREMENT=121;
+INSERT INTO BANK(Bank_Name,Acc_No,Closing_Bal)VALUES 
+('SBI','9889677656653113',80430),
+('Kotak','1122113311445533',80430),
+('HDFC','9812334875673491',80430),
+('IOB','0998531423198764',80430),
+('BOI','9976564321789908',80430);
+INSERT INTO Contractor (Acc_No,Aadhar,Email,cname,Ph_no,Con_Password) VALUES
+('9889677656653113','124351716235','Shikardwn@gamil.com','ShikarDhawan','6940644063','ShikDwn'),
+('1122113311445533','987887652431','Rahukl1@gamil.com','RahulKL','4241732893','WCoo1'),
+('9812334875673491','198732134652','Megaa32@gamil.com','MegnaShri','4881775081','Meghere'),
+('0998531423198764','198256315432','Rutu31@gamil.com','Ruturaj','8978671290','Ruturajcap'),
+('9976564321789908','171617151712','SureshR03@gamil.com','Suresh Raina','7215487898','Raina003');
+drop table tag;
+drop table vehicle;
+CREATE TABLE TAG
+(
+Tag_Id INT PRIMARY KEY AUTO_INCREMENT,
+Wallet_Bal DOUBLE,
+Security_Deposit INT DEFAULT 100
+); 
+INSERT INTO TAG(Wallet_Bal) VALUES
+(30000),(40000),(5000),(6000);
+
+INSERT INTO TAG(Wallet_Bal) VALUES
+(4500),(6700),(3070),(6800);
+
+CREATE TABLE VEHICLE
+(
+CID  INT,FOREIGN KEY (CID) REFERENCES customer(CID), 
+ Veh_No VARCHAR(10) PRIMARY KEY,
+    Veh_Type VARCHAR(10),
+    Tag_Id INT,FOREIGN KEY(Tag_Id) REFERENCES TAG(Tag_Id)
+
+);
+select * from bank;
+select * from Vehicle;
+delete from tag where Tag_Id = 4;
+insert into VEHICLE (CID,Veh_No,Veh_Type,Tag_Id)values 
+(1,'TN37DS8273','lmv',211),
+(2,'TN37DJ7777','hcm',212),
+(3,'TN37CD5369','2axle',213),
+(4,'TN66AB6756','lmv',214);
+insert into VEHICLE (CID,Veh_No,Veh_Type,Tag_Id)values
+(5,'TN37NJ9876','hcm',215),
+(1,'TN38IJ1254','2axle',216),
+(2,'TN66L5334','hcm',217),
+(3,'TN99L4466','hcm',218);
+
+select * from Vehicle;
+
+alter table tag auto_increment 211; 
+delete from Customer where CID = 6;
+create table toll 
+(
+	Toll_No INT PRIMARY KEY
+ 
+
+);
+INSERT INTO TOLL(Toll_No) VALUES 
+(121),(122),(123),(124),(125),(221),(222),(223),(321),(322),(323),(324),(325),(421),(422),(521),(522),(523),(524),(621),(622);
+insert into toll(Toll_No) values 
+(821),(822),(823);
+SELECT * from tag;
+CREATE INDEX idx_Veh_Type ON VEHICLE(Veh_Type);
+
+-- toll look up table
+create table Toll_Fair
+(
+	Toll_No INT,FOREIGN KEY(Toll_No) REFERENCES TOLL(Toll_No),
+    Veh_Type  VARCHAR(10),FOREIGN KEY(Veh_Type) REFERENCES VEHICLE(Veh_Type),
+    Fair_Amt INT NOT NULL
+
+);
+select * from Toll_Fair;
+drop table Toll_Fair;
+insert into Toll_Fair(Toll_No,Veh_Type,Fair_Amt) values 
+(121,'lmv',85),(121,'hcm',400),(121,'2axle',120),
+(122,'lmv',60),(122,'hcm',250),(122,'2axle',75),
+(123,'lmv',20),(123,'hcm',140),(123,'2axle',110),
+(124,'lmv',105),(124,'hcm',300),(124,'2axle',127),
+(125,'lmv',200),(125,'hcm',120),(125,'2axle',80),
+(126,'lmv',85),(126,'hcm',90),(126,'2axle',100),
+(127,'lmv',78),(127,'hcm',100),(127,'2axle',110),
+(128,'lmv',100),(128,'hcm',120),(128,'2axle',150),
+(129,'lmv',99),(129,'hcm',120),(129,'2axle',135);
+
+
+select * from Contractor;
+create table Route
+(
+	RID INT,
+    Src VARCHAR(20),
+    Dest VARCHAR(20)
+);
+select * from tag;
+INSERT INTO ROUTE (RID,Src,Dest) VALUES 
+(001,'Coimbatore','Chennai'),
+(002,'Coimbatore','Pondicherry'),
+(003,'Chennai','pondicherry'),
+(004,'Chennai','Coimbatore'),
+(005,'Pondicherry','Coimbatore'),
+(006,'Pondicherry','Chennai');
+
+SELECT * FROM Contractor;
+drop table toll_contractor;
+CREATE TABLE TOLL_CONTRACTOR (
+    RID INT,
+    Toll_No INT,
+    Con_id INT,
+    available ENUM('yes', 'no') DEFAULT 'no',
+    FOREIGN KEY (RID) REFERENCES Route(RID),
+    FOREIGN KEY (Toll_No) REFERENCES TOLL(Toll_No),
+    FOREIGN KEY (Con_id) REFERENCES Contractor(Con_id)
+);
+
+CREATE INDEX toll_contractor_ibfk_1 ON ROUTE(RID);
+INSERT INTO TOLL_CONTRACTOR (RID,Toll_No,Con_id,available) VALUES
+-- cbe to chennai
+(1,121,122,'yes'),
+(1,122,121,'no'),
+(1,123,125,'no'),
+(1,124,124,'yes'),
+(1,125,121,'no'),
+
+-- coimbatore to pondy 
+(2,121,122,'yes'),
+(2,122,121,'no'),
+(2,123,125,'no'),
+(2,124,124,'yes'),
+(2,126,124,'no'),
+
+-- Chennai to pondy
+(3,127,123,'no'),
+(3,125,121,'no'),
+(3,128,122,'no'),
+(3,129,125,'no'),
+
+
+-- chennai to cbe 
+(4,125,121,'no'),
+(4,124,124,'yes'),
+(4,123,125,'no'),
+(4,122,121,'no'),
+(4,121,122,'yes'),
+
+-- pondy to cbe
+(5,126,124,'no'),
+(5,124,124,'yes'),
+(5,123,125,'no'),
+(5,122,121,'no'),
+(5,121,122,'yes'),
+
+-- pondy to chennai
+(6,129,125,'no'),
+(6,128,122,'no'),
+(6,125,121,'no'),
+(6,127,123,'no'),
+
+-- cbe to salem 
+
+(8,121,122,'yes'),
+(8,122,121,'no');
+select * from TOLL_CONTRACTOR;
+ALTER TABLE TOLL_CONTRACTOR
+MODIFY Con_id INT NULL;
+
+create table Recharge
+(
+CID INT ,FOREIGN KEY (CID) REFERENCES CUSTOMER(CID),
+Cust_Name varchar(20) ,
+Rtimestamp timestamp , 
+Veh_No varchar(10) , foreign key(Veh_No) references vehicle(Veh_No),
+Amount int 
+);
+ALTER TABLE Recharge
+MODIFY Rtimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+select * from Route;
+INSERT INTO ROUTE (RID,Src,Dest) VALUES 
+-- (007,'Tripur','Madurai'),
+(008,'Coimbatore','Salem');
+select * from Route;
+select * from toll;
+select * from toll_fair;
+select * from Toll_Contractor;
+select * from recharge;
+select * from vehicle;
+ALTER TABLE TOLL_CONTRACTOR
+MODIFY Con_id INT NULL;
+
+insert into toll(Toll_No) values 
+(623),(624),(625);
+INSERT INTO TOLL_CONTRACTOR (RID,Toll_No,Con_id) VALUES
+(6,623,null);
+INSERT INTO TOLL_CONTRACTOR (RID,Toll_No,Con_id) VALUES
+(6,624,null),
+(6,625,null);
+
+ALTER TABLE Toll ADD toll_Name VARCHAR(50);
+ALTER TABLE Toll MODIFY Toll_No INT;
+
+-- coimbatore to chennai
+INSERT  INTO Toll (Toll_No, toll_Name) VALUES 
+(121, 'Kumarapalayam'),
+(122, 'Vijaymangalam'),
+(123, 'Salem'),
+(124, 'Ulundrupet'),
+(125, 'Chengalpet');
+-- coimbatore to pondy 
+
+-- (121, 'Kumarapalayam'),
+-- (122, 'Vijaymangalam'),
+-- (123, 'Salem'),
+-- (124, 'Ulundrupet'),
+INSERT INTO Toll (Toll_No, toll_Name) VALUES 
+(126, 'Vilupuram');
+
+-- Chennai to pondy
+INSERT INTO Toll (Toll_No, toll_Name) VALUES 
+(127, 'Vanagaram'),
+-- (128, 'Chengalpet'),
+(128, 'Thindivanam'),
+(129, 'Morattandi');
+DELETE FROM Toll WHERE Toll_No IN (121, 122, 123, 124, 125);
+DELETE FROM Toll WHERE Toll_No IN (221,222,223,321,322,323,324,325,421,422,521,522,523,524,621,622,623,624,625,821,822,823);
+delete from route where rid=007;
+drop table toll_Contractor;
+drop table toll_fair;
+create table Toll_Lease(
+	Toll_No INT,FOREIGN KEY(Toll_No) REFERENCES TOLL(Toll_No),
+    Toll_Amt double );
+    INSERT INTO  Toll_Lease(Toll_No,Toll_Amt)VALUES
+    (121,10000),
+    (122,12000),
+    (123,18000),
+    (124,30000),
+    (125,15000),
+    (126,17000),
+    (127,44000),
+    (128,15000),
+    (129,16000);
+    
+CREATE INDEX idx_toll_name ON TOLL(toll_Name);
+
+CREATE TABLE Toll_AmountCollected (
+    Toll_No INT,
+    toll_Name VARCHAR(50),
+    RID INT,
+    Veh_No VARCHAR(10),
+    AmtTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Fair_collected INT,
+    FOREIGN KEY (Toll_No) REFERENCES TOLL(Toll_No),
+    FOREIGN KEY (toll_Name) REFERENCES TOLL(toll_Name),
+    FOREIGN KEY (RID) REFERENCES Route(RID),
+    FOREIGN KEY (Veh_No) REFERENCES VEHICLE (Veh_No)
+);
+
+-- coimbatore to Salem
+-- (121, 'Kumarapalayam '),
+-- (122, 'Vijaymangalam');
+
+select * from Toll_AmountCollected;
+select * from contractor;
+select * from bank;
+select * from toll_contractor;
+UPDATE toll_contractor
+SET available = 'yes'
+WHERE Toll_No IN (125,124); 
