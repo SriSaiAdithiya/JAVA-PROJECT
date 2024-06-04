@@ -136,7 +136,8 @@ public class Driving {
 
     private void startTollSequence(JLabel tollimage, List<Integer> tolls, int index) {
         if (index >= myTolls.size()) {
-            return;
+            JOptionPane.showMessageDialog(null,"Successfully reached "+ selectedDestination);
+            newframe.setVisible(false);
         }
 
         int tollNo = myTolls.get(index);
@@ -145,7 +146,7 @@ public class Driving {
 
         if (walletBalance < fairAmount) {
             JOptionPane.showMessageDialog(newframe, "Insufficient balance for toll: " + tollName, "Insufficient Balance", JOptionPane.ERROR_MESSAGE);
-            return;
+            //new Recharge_Design(cid).setVisible(true);
         }
 
         walletBalance -= fairAmount;
@@ -169,24 +170,25 @@ public class Driving {
                 ImageIcon openTollIcon = new ImageIcon("D:\\OS NOTES\\javaprojects\\openimg.jpg");
                 Image openTollScaledImage = openTollIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
                 tollimage.setIcon(new ImageIcon(openTollScaledImage));
+                tollNameLabel.setForeground(Color.green);
 
                 // Set a timer to change back to close image after 3 seconds
                 Timer closeTimer = new Timer(3000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        tollNameLabel.setForeground(Color.BLACK);
                         ImageIcon closedTollIcon = new ImageIcon("D:\\OS NOTES\\javaprojects\\closeimg.jpg");
                         Image closedTollScaledImage = closedTollIcon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
                         tollimage.setIcon(new ImageIcon(closedTollScaledImage));
 
-                        // Start the next toll sequence
                         startTollSequence(tollimage, tolls, index + 1);
                     }
                 });
-                closeTimer.setRepeats(false); // Ensure this timer only runs once
+                closeTimer.setRepeats(false);
                 closeTimer.start();
             }
         });
-        openTimer.setRepeats(false); // Ensure this timer only runs once
+        openTimer.setRepeats(false);
         openTimer.start();
     }
 
