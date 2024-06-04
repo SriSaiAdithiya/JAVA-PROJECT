@@ -1,9 +1,12 @@
 package Login;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 
 public class BuyToll extends JFrame {
@@ -12,26 +15,56 @@ public class BuyToll extends JFrame {
     private JLabel contractorLabel;
     private JLabel accountBalanceLabel;
     private JButton selectButton;
+    private JButton backButton;
     private int contractorId;
 
     public BuyToll(int contractorId) {
         this.contractorId = contractorId;
         setTitle("Buy Toll");
-        setSize(1000, 600); // Reduced frame size
+        setSize(600, 300); // Reduced frame size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(6, 1));
+        setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(14, 132, 248)); // Set background color
 
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Create panel for top components
+        // Top panel for the back button and contractor details
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setBackground(new Color(14, 132, 248));
+
+        // Back button with arrow icon
+        try {
+            Image img = ImageIO.read(new File("/Users/pragathykumar/Downloads/icons8-back-30.png"));
+            backButton = new JButton(new ImageIcon(img));
+        } catch (IOException e) {
+            e.printStackTrace();
+            backButton = new JButton("Back"); // Fallback text if image fails to load
+        }
+        backButton.setPreferredSize(new Dimension(50, 50)); // Set preferred size for the button
+        backButton.setContentAreaFilled(false); // Remove button background
+        backButton.setBorderPainted(false); // Remove button border
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Close the current window
+                new Contractor_page(contractorId).setVisible(true); // Open the Contractor_page window
+            }
+        });
+        topPanel.add(backButton, BorderLayout.WEST);
+
+        // Contractor details
+        JPanel contractorDetailsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        contractorDetailsPanel.setBackground(new Color(14, 132, 248));
         contractorLabel = new JLabel();
         accountBalanceLabel = new JLabel();
         fetchContractorDetails(contractorId);
-        topPanel.add(contractorLabel);
-        topPanel.add(accountBalanceLabel);
-        topPanel.setBackground(new Color(14, 132, 248)); // Set background color
-        add(topPanel);
+        contractorDetailsPanel.add(contractorLabel);
+        contractorDetailsPanel.add(accountBalanceLabel);
+        topPanel.add(contractorDetailsPanel, BorderLayout.CENTER);
 
-        JPanel middlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Create panel for middle components
+        add(topPanel, BorderLayout.NORTH);
+
+        // Middle panel for source and destination options
+        JPanel middlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        middlePanel.setBackground(new Color(255, 255, 255));
         sourceComboBox = new JComboBox<>();
         destComboBox = new JComboBox<>();
         fetchSourceAndDestinationOptions();
@@ -39,10 +72,11 @@ public class BuyToll extends JFrame {
         middlePanel.add(sourceComboBox);
         middlePanel.add(new JLabel("Destination:"));
         middlePanel.add(destComboBox);
-        middlePanel.setBackground(new Color(255, 255, 255)); // Set background color
-        add(middlePanel);
+        add(middlePanel, BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Create panel for bottom components
+        // Bottom panel for the select button
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bottomPanel.setBackground(new Color(14, 132, 248));
         selectButton = new JButton("Select");
         selectButton.setPreferredSize(new Dimension(150, 40)); // Reduced button size
         selectButton.addActionListener(new ActionListener() {
@@ -52,8 +86,7 @@ public class BuyToll extends JFrame {
             }
         });
         bottomPanel.add(selectButton);
-        bottomPanel.setBackground(new Color(14, 132, 248)); // Set background color
-        add(bottomPanel);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);
     }
