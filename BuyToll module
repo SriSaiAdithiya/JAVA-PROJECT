@@ -1,0 +1,131 @@
+package Login;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+
+public class BuyToll extends JFrame {
+    private JComboBox<String> sourceComboBox;
+    private JComboBox<String> destComboBox;
+    private JLabel contractorLabel;
+    private JLabel accountBalanceLabel;
+    private JButton selectButton;
+    private int contractorId;
+
+    public BuyToll(int contractorId) {
+        this.contractorId = contractorId;
+        setTitle("Buy Toll");
+        setSize(1000, 600); // Reduced frame size
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(6, 1));
+        getContentPane().setBackground(new Color(14, 132, 248)); // Set background color
+
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Create panel for top components
+        contractorLabel = new JLabel();
+        accountBalanceLabel = new JLabel();
+        fetchContractorDetails(contractorId);
+        topPanel.add(contractorLabel);
+        topPanel.add(accountBalanceLabel);
+        topPanel.setBackground(new Color(14, 132, 248)); // Set background color
+        add(topPanel);
+
+        JPanel middlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Create panel for middle components
+        sourceComboBox = new JComboBox<>();
+        destComboBox = new JComboBox<>();
+        fetchSourceAndDestinationOptions();
+        middlePanel.add(new JLabel("Source:"));
+        middlePanel.add(sourceComboBox);
+        middlePanel.add(new JLabel("Destination:"));
+        middlePanel.add(destComboBox);
+        middlePanel.setBackground(new Color(255, 255, 255)); // Set background color
+        add(middlePanel);
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Create panel for bottom components
+        selectButton = new JButton("Select");
+        selectButton.setPreferredSize(new Dimension(150, 40)); // Reduced button size
+        selectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fetchAvailableTolls(contractorId);
+            }
+        });
+        bottomPanel.add(selectButton);
+        bottomPanel.setBackground(new Color(14, 132, 248)); // Set background color
+        add(bottomPanel);
+
+        setVisible(true);
+    }
+
+    private void fetchContractorDetails(int contractorId) {
+        try (Connection connection = dbconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement("SELECT c.cname, b.Closing_Bal " +
+                     "FROM Contractor c " +
+                     "JOIN Bank b ON c.Acc_No = b.Acc_No " +
+                     "WHERE c.Con_id = ?")) {
+            statement.setInt(1, contractorId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String contractorName = resultSet.getString("cname");
+                double closingBalance = resultSet.getDouble("Closing_Bal");
+                contractorLabel.setText("<html><font color='black'><b>Contractor: </b></font>" + contractorName);
+                accountBalanceLabel.setText("<html><font color='black'><b>Closing Balance: </b></font>" + closingBalance);
+                contractorLabel.setFont(new Font("Arial", Font.BOLD, 14));
+                accountBalanceLabel.setFont(new Font("Arial", Font.BOLD, 14));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchSourceAndDestinationOptions() {
+        try (Connection connection = dbconnection.getConnection();
+             Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery("SELECT DISTINCT Src FROM ROUTE");
+            while (resultSet.next()) {
+                sourceComboBox.addItem(resultSet.getString("Src"));
+            }
+            resultSet = statement.executeQuery("SELECT DISTINCT Dest FROM ROUTE");
+            while (resultSet.next()) {
+                destComboBox.addItem(resultSet.getString("Dest"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void fetchAvailableTolls(int contractorId) {
+        String source = sourceComboBox.getSelectedItem().toString();
+        String destination = destComboBox.getSelectedItem().toString();
+        String tollNos = "";
+
+        try (Connection connection = dbconnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT Toll_No FROM TOLL_CONTRACTOR WHERE RID IN (SELECT RID FROM ROUTE WHERE Src = ? AND Dest = ?) AND available = 'yes'")) {
+            statement.setString(1, source);
+            statement.setString(2, destination);
+            ResultSet resultSet = statement.executeQuery();
+            StringBuilder tolls = new StringBuilder();
+            while (resultSet.next()) {
+                int tollNo = resultSet.getInt("Toll_No");
+                tolls.append(tollNo).append(", ");
+                tollNos += tollNo + ",";
+            }
+            if (tolls.length() > 0) {
+                tolls.delete(tolls.length() - 2, tolls.length()); // Remove the last comma and space
+                TollAvailableToBuy tollAvailableToBuy = new TollAvailableToBuy(contractorId, tolls.toString());
+                tollAvailableToBuy.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "No available tolls for lease.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        int contractorId = 121; // Example contractor ID
+        SwingUtilities.invokeLater(() -> new BuyToll(contractorId));
+    }
+}
